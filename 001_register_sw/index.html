@@ -1,0 +1,37 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Learning Service Workers</title>
+    <meta name="description" content="The HTML5 Herald">
+    <meta name="author" content="SitePoint">
+
+    <link rel="stylesheet" type="text/css" href="./001_register_sw/style.css"> 
+    <script src="./001_register_sw/offline-switch.js"></script>
+</head>
+
+<body>
+    <header>
+      <h1>001 - Register/Unregister Service Worker</h1>
+    </header>
+    <main>
+        <div id="offline-switch">
+            <span id="offlineDisabled">Want offline access?</span>
+            <span id="offlineEnabled">Offline Access</span>
+
+            <label class="switch">
+                <input id="offline-checkbox" type="checkbox" onchange="setOffline(event.target.checked)">
+                <span class="slider round"></span>
+            </label>
+        </div>
+          
+    </main>
+    
+    
+    <script>
+        updateSwitchFromStorage();
+    </script>
+</body>
+</html>
