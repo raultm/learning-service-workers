@@ -25,6 +25,20 @@ footer {
 }
 
 /* Switch */
+#offline-switch #offlineEnabled {
+	display: none;
+}
+#offline-switch.checked #offlineEnabled {
+	display: inline;
+}
+#offline-switch.checked #offlineDisabled {
+	display: none;
+}
+
+#offline-switch.checked {
+	opacity: 1;
+	font-style: inherit;
+}
 /* The switch - the box around the slider */
 .switch {
     position: relative;
