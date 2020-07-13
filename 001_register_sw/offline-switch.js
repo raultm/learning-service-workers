@@ -8,7 +8,7 @@ function setOffline (checked) {
   
     if (checked) {
       localStorage.setItem("offline", "true");
-      navigator.serviceWorker.register('/001_register_sw/sw.js').then(function (registration) {
+      navigator.serviceWorker.register('sw.js').then(function (registration) {
         console.log('Service Worker registration successful with scope: ', registration.scope);
       }).catch(function (err) {
         var checkbox = document.getElementById("offline-checkbox");
@@ -17,7 +17,7 @@ function setOffline (checked) {
       });
     } else {
       localStorage.setItem("offline", "false");
-      navigator.serviceWorker.getRegistration("/001_register_sw/sw.js").then(function (reg) {
+      navigator.serviceWorker.getRegistration("sw.js").then(function (reg) {
         console.log("Unregistering...");
         return reg.unregister();
       }).then(function (res) {
@@ -36,7 +36,7 @@ function updateSwitchFromStorage() {
     checkbox.checked = offline === "true" ? true : false;
     if (!offline && ('serviceWorker' in navigator)) {
       // Update the switch if offline is not in localstorage but site is indeed offline
-      navigator.serviceWorker.getRegistration("/001_register_sw/sw.js").then(function (reg) {
+      navigator.serviceWorker.getRegistration("sw.js").then(function (reg) {
         if (reg) {
           offlineSwitch.className = "checked";
           var checkbox = document.getElementById("offline-checkbox");

@@ -1,9 +1,9 @@
 // Cache all css
 // 
 const raw = [
-    "/001_register_sw/index.html",
-    "/001_register_sw/register_sw.js",
-    "/001_register_sw/style.css",
+    "index.html",
+    "register_sw.js",
+    "style.css",
 ];
 
 const CACHE_NAME = 'lsw-offline-cache';
