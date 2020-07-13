@@ -1,3 +1,8 @@
+var loc = window.location.pathname;
+var currentFolder = window.location.pathname.substring(0, loc.lastIndexOf('/')) + "/";
+
+//console.log(currentFolder);
+
 function setOffline (checked) {
     if (!('serviceWorker' in navigator)) {
       event.preventDefault();
@@ -8,7 +13,7 @@ function setOffline (checked) {
   
     if (checked) {
       localStorage.setItem("offline", "true");
-      navigator.serviceWorker.register('sw.js').then(function (registration) {
+      navigator.serviceWorker.register(currentFolder + 'sw.js').then(function (registration) {
         console.log('Service Worker registration successful with scope: ', registration.scope);
       }).catch(function (err) {
         var checkbox = document.getElementById("offline-checkbox");
@@ -17,7 +22,7 @@ function setOffline (checked) {
       });
     } else {
       localStorage.setItem("offline", "false");
-      navigator.serviceWorker.getRegistration("sw.js").then(function (reg) {
+      navigator.serviceWorker.getRegistration(currentFolder + "sw.js").then(function (reg) {
         console.log("Unregistering...");
         return reg.unregister();
       }).then(function (res) {
@@ -36,7 +41,7 @@ function updateSwitchFromStorage() {
     checkbox.checked = offline === "true" ? true : false;
     if (!offline && ('serviceWorker' in navigator)) {
       // Update the switch if offline is not in localstorage but site is indeed offline
-      navigator.serviceWorker.getRegistration("sw.js").then(function (reg) {
+      navigator.serviceWorker.getRegistration(currentFolder + "sw.js").then(function (reg) {
         if (reg) {
           offlineSwitch.className = "checked";
           var checkbox = document.getElementById("offline-checkbox");
