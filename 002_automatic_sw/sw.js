@@ -2,11 +2,16 @@
 // 
 const raw = [
     "index.html",
-    "register_sw.js",
+    "offline.js",
     "style.css",
+    "page01.html",
+    "page02.html",
+    "page03.html",
+    "page04.html",
+    "page05.html",
 ];
 
-const CACHE_NAME = 'lsw001-offline-cache';
+const CACHE_NAME = 'lsw002-offline-cache';
 
 async function waitForAll(promises){
     return new Promise( resolve => {
