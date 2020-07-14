@@ -54,6 +54,10 @@ self.addEventListener('install', function (event) {
 const MAX_WAIT = 300; // If network responds slower than 100 ms, respond with cache instead
 
 self.addEventListener('fetch', function (event) {
+    var url = new URL(event.request.url);
+    for(var value of url.searchParams.entries()) {
+        console.log(value, url.searchParams.get(value));
+    }
     // Start reading from cache
     const cachedResponsePromise = caches.match(event.request);
     const fetchPromise = fetch(event.request);
