@@ -1,0 +1,100 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Learning Service Workers</title>
+    <link rel="stylesheet" type="text/css" href="style.css"> 
+    <script src="offline.js"></script>
+    <script src="sql.js"></script>
+</head>
+
+<body>
+    <header>
+      <h1>Cache Database with at least million records in Service Worker</h1>
+      <button onclick="showCities()">Cities</button>
+      <button onclick="showHighschools()">High Schools</button>
+      <button onclick="showBuildings()">Buildings</button>
+      <button onclick="showItem(787949)">Item 787949</button>
+      <button onclick="showItems()">Items filtered</button>
+      <ul id="list-items"></ul>
+    </header>
+    <main>
+               
+    </main>
+    
+    
+    <script>
+        setOffline();
+        var db;
+        var xhr = new XMLHttpRequest();
+        // For example: https://github.com/lerocha/chinook-database/raw/master/ChinookDatabase/DataSources/Chinook_Sqlite.sqlite
+        xhr.open('GET', './database.sqlite', true);
+        xhr.responseType = 'arraybuffer';
+
+        xhr.onload = e => {
+            var uInt8Array = new Uint8Array(xhr.response);
+            db = new SQL.Database(uInt8Array);
+            showCities()
+        };
+        xhr.send();
+
+        function showCities()
+        {
+            execSQL("SELECT id, name FROM cities")
+        }
+
+        function showHighschools()
+        {
+            execSQL("SELECT cities.name, highschools.name FROM highschools INNER JOIN cities WHERE highschools.city_id = cities.id")
+        }
+
+        function showBuildings()
+        {
+            execSQL("SELECT cities.name, highschools.name, buildings.name FROM highschools INNER JOIN cities ON highschools.city_id = cities.id INNER JOIN buildings ON buildings.highschool_id = highschools.id")
+        }
+
+        function showItems()
+        {
+            execSQL(`SELECT cities.name, highschools.name, buildings.name, rooms.name, items.name, items.type
+                FROM highschools 
+                INNER JOIN cities ON highschools.city_id = cities.id 
+                INNER JOIN buildings ON buildings.highschool_id = highschools.id
+                INNER JOIN rooms ON rooms.building_id = buildings.id
+                INNER JOIN items ON items.room_id = rooms.id
+                WHERE items.type = "computer"
+                AND items.name LIKE '%4'
+                AND rooms.id = 42
+            `)
+        }
+
+        function showItem(id)
+        {
+            execSQL(`SELECT items.id, cities.name, highschools.name, buildings.name, rooms.name, items.name, items.type
+                FROM highschools 
+                INNER JOIN cities ON highschools.city_id = cities.id 
+                INNER JOIN buildings ON buildings.highschool_id = highschools.id
+                INNER JOIN rooms ON rooms.building_id = buildings.id
+                INNER JOIN items ON items.room_id = rooms.id
+                WHERE items.id = ${id}
+            `)
+        }
+
+        function execSQL(sql)
+        {
+            if(!db ){ console.log("Database not loaded yet"); return; }
+            var contents = db.exec(sql);
+            var list = document.getElementById("list-items")
+            list.innerHTML = ""
+            contents.forEach(element => {
+                element.values.forEach(element => {
+                    //console.log(element)
+                    var li = document.createElement('li');
+                    list.appendChild(li);
+                    li.innerHTML += element.join(' - ');
+                })
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Learning Service Workers</title>
+    <link rel="stylesheet" type="text/css" href="style.css"> 
+    <script src="offline.js"></script>
+    <script src="idb.js"></script>
+</head>
+
+<body>
+    <header>
+      <h1>Populate Data in IndexedDB on SW Install</h1>
+    </header>
+    <main>
+               
+    </main>
+    
+    
+    <script>
+        setOffline();
+        navigator.serviceWorker.addEventListener('message', event => {
+            console.log(event.data.msg, event.data.url);
+        });
+    </script>
+</body>
+</html>
