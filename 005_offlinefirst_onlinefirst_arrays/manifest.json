@@ -1,0 +1,20 @@
+{
+    "name": "005 Example",
+    "short_name": "005 Example",
+    "icons": [
+    {
+        "src": "read_smartphone_man.png",
+        "sizes": "192x192",
+        "type": "image/png"
+    },
+    {
+        "src": "read_smartphone_man.png",
+        "sizes": "512x512",
+        "type": "image/png"
+    }
+    ],
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#FF9E48",
+    "theme_color": "#4DBA87"
+}
