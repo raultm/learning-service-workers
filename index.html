@@ -22,21 +22,13 @@
         <div class="red-line"></div>
         
         <div class="list-item-wrapper">
-            <div class="list-bullet">1</div>
+            <div class="list-bullet">4</div>
             <div class="list-item">
-                <div class="list-title"><a href="001_register_sw/index.html">Register/Unregister Service Worker</a></div>
-                <div class="list-text">Allow to enable/disable Service Worker with switch</div>
+                <div class="list-title"><a href="004_cache_sqlite_database_1m/index.html">Cache Database With MILLION of records</a></div>
+                <div class="list-text">Use Service worker cache a sqlite database with a million of records</div>
             </div>
+            
         </div>
-        
-        <div class="list-item-wrapper">
-            <div class="list-bullet">2</div>
-            <div class="list-item">
-                <div class="list-title"><a href="002_automatic_sw/index.html">Automatic SW Registration. Cache pages</a></div>
-                <div class="list-text">Automatic Service Worker Registration. After registration you can navigate through cached pages offline</div>
-            </div>
-        </div>
-        
         <div class="list-item-wrapper">
             <div class="list-bullet">3</div>
             <div class="list-item">
@@ -45,13 +37,25 @@
             </div>
         </div>
         <div class="list-item-wrapper">
-            <div class="list-bullet">4</div>
+            <div class="list-bullet">2</div>
             <div class="list-item">
-                <div class="list-title"><a href="004_cache_sqlite_database_1m/index.html">Cache Database With MILLION of records</a></div>
-                <div class="list-text">Use Service worker cache a sqlite database with a million of records</div>
+                <div class="list-title"><a href="002_automatic_sw/index.html">Automatic SW Registration. Cache pages</a></div>
+                <div class="list-text">Automatic Service Worker Registration. After registration you can navigate through cached pages offline</div>
+            </div>
+        </div>
+        <div class="list-item-wrapper">
+            <div class="list-bullet">1</div>
+            <div class="list-item">
+                <div class="list-title"><a href="001_register_sw/index.html">Register/Unregister Service Worker</a></div>
+                <div class="list-text">Allow to enable/disable Service Worker with switch</div>
             </div>
             <div class="white-line"></div>
         </div>
+        
+        
+        
+        
+        
         
         <div class="list-item-wrapper" style="display:none">
             <div class="list-bullet">5</div>
@@ -73,6 +77,12 @@
         
     </div>
     </main>
+    <script>
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+            console.log(registrations);
+        });
+
+    </script>
     <footer>footer</footer>
 </body>
 </html>

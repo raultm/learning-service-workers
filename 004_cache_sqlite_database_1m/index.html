@@ -16,7 +16,9 @@
       <button onclick="showHighschools()">High Schools</button>
       <button onclick="showBuildings()">Buildings</button>
       <button onclick="showItem(787949)">Item 787949</button>
-      <button onclick="showItems()">Items filtered</button>
+      <button onclick="showItemsSimple()">Items filtered by indexed column</button>
+      <button onclick="showItemsComplex()">Items filtered by text search</button>
+      <button onclick="showItemsWithNoInnerJoin()">Items filtered by indexed column(NO INNER JOINS)</button>
       <ul id="list-items"></ul>
     </header>
     <main>
@@ -37,6 +39,8 @@
             db = new SQL.Database(uInt8Array);
             showCities()
         };
+        var list = document.getElementById("list-items")
+        list.innerHTML = "<li>Cargando Base de Datos</li>"
         xhr.send();
 
         function showCities()
@@ -54,7 +58,20 @@
             execSQL("SELECT cities.name, highschools.name, buildings.name FROM highschools INNER JOIN cities ON highschools.city_id = cities.id INNER JOIN buildings ON buildings.highschool_id = highschools.id")
         }
 
-        function showItems()
+        function showItemsSimple()
+        {
+            execSQL(`SELECT cities.name, highschools.name, buildings.name, rooms.name, items.name, items.type
+                FROM highschools 
+                INNER JOIN cities ON highschools.city_id = cities.id 
+                INNER JOIN buildings ON buildings.highschool_id = highschools.id
+                INNER JOIN rooms ON rooms.building_id = buildings.id
+                INNER JOIN items ON items.room_id = rooms.id
+                WHERE items.type = "computer"
+                AND items.room_id = 42
+            `)
+        }
+
+        function showItemsComplex()
         {
             execSQL(`SELECT cities.name, highschools.name, buildings.name, rooms.name, items.name, items.type
                 FROM highschools 
@@ -66,6 +83,13 @@
                 AND items.name LIKE '%4'
                 AND rooms.id = 42
             `)
+        }
+
+        function showItemsWithNoInnerJoin()
+        {
+            execSQL(`SELECT *
+                FROM items
+                WHERE items.room_id = 42`)
         }
 
         function showItem(id)
@@ -83,8 +107,11 @@
         function execSQL(sql)
         {
             if(!db ){ console.log("Database not loaded yet"); return; }
-            var contents = db.exec(sql);
             var list = document.getElementById("list-items")
+            list.innerHTML = "<li>Consultando...</li>"
+            console.time("exec: " + sql);
+            var contents = db.exec(sql);
+            console.timeEnd("exec: " + sql);
             list.innerHTML = ""
             contents.forEach(element => {
                 element.values.forEach(element => {
