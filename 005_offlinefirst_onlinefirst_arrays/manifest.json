@@ -2,16 +2,11 @@
     "name": "005 Example",
     "short_name": "005 Example",
     "icons": [
-    {
-        "src": "read_smartphone_man.png",
-        "sizes": "192x192",
-        "type": "image/png"
-    },
-    {
-        "src": "read_smartphone_man.png",
-        "sizes": "512x512",
-        "type": "image/png"
-    }
+        {
+            "src": "/learning-service-workers/005_offlinefirst_onlinefirst_arrays/icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
     ],
     "start_url": "/learning-service-workers/005_offlinefirst_onlinefirst_arrays/index.html",
     "display": "standalone",
