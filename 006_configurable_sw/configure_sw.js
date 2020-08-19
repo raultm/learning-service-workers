@@ -6,8 +6,9 @@ async function setupServiceWorker () {
         console.log('Service Worker NOT supported!');
         return;
     }
-    await unregisterServiceWorker()
-    navigator.serviceWorker.register(currentFolder + 'sw.js?foo=bar&skipWaiting=true').then(function (registration) {
+    //await unregisterServiceWorker()
+    //navigator.serviceWorker.register(currentFolder + 'sw.js?foo=bar&skipWaiting=true').then(function (registration) {
+    navigator.serviceWorker.register(currentFolder + 'sw.js').then(function (registration) {
         console.log('Service Worker registration successful with scope: ', registration.scope);
     }).catch(function (err) {
         console.error(err);
