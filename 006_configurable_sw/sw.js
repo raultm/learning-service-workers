@@ -1,11 +1,18 @@
 const CACHE_NAME = 'lsw006-configure-sw';
 
-self.importScripts('sw-configuration.js');
+function isServiceWorkerContext()
+{
+    return self.constructor.name === "ServiceWorkerGlobalScope"
+}
 
+if( isServiceWorkerContext() ) {
+    self.importScripts('sw-configuration.js');
+}
 /*
 for (const [key, value] of new URL(location).searchParams) {
     console.log(key, value);
 }
+
 */
 
 const swDefault = {
@@ -18,7 +25,7 @@ const swDefault = {
         "style.css",
         "page01.html",
     ],
-    "offlinefirst" : [
+    "offlineFirstPages" : [
         "page01.html",
     ],
     "cacheableStatus" :[ 200 ],
@@ -29,7 +36,7 @@ const swDefault = {
         "WARNING" : 30,
         "ERROR" : 50
     },
-    "isOfflineFirst": (url) => sw.offlinefirst.includes(url),
+    "isOfflineFirst": (url) => sw.offlineFirstPages.includes(url),
     "log": (...args) => {
         var firstParam = args.shift()
         
@@ -148,6 +155,8 @@ const swDefault = {
             sw.log("WARNING", `onlineResponse`)
             return res;
         }, async error => {
+            //sw.log("WARNING", `error`, error)
+            console.dir(error)
             const cachedResponse = await cachedResponsePromise.catch(err => null);
             if (cachedResponse && cachedResponse.ok) {
                 sw.log("INFO", `From Cache ${event.request.url} - ${relativeUrl}`)
@@ -209,9 +218,9 @@ const swDefault = {
 
 const sw = {...swDefault, ...swCustom }
 
-console.log(sw);
+//console.log(sw);
 
-if(self instanceof ServiceWorkerGlobalScope) {
+if( isServiceWorkerContext() ) {
     console.warn("Service Worker Register Context")
     sw.setup()
     // https://developer.mozilla.org/en-US/docs/Web/API/console
@@ -242,6 +251,7 @@ if(self instanceof ServiceWorkerGlobalScope) {
     
 } else {
     // https://developer.mozilla.org/en-US/docs/Web/API/console
+    /*
     console.assert("Assert")
     console.debug("Debug")
     console.dir(sw)
@@ -263,6 +273,7 @@ if(self instanceof ServiceWorkerGlobalScope) {
     console.groupEnd()
 
     console.warn("Service Worker NOT Register Context")
+    */
 }
 
 

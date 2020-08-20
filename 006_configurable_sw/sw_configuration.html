@@ -1,0 +1,113 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Configurable Service Worker</title>
+    <meta name="description" content="Home App">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="apple-touch-startup-image" href="icon.png">
+    <link rel="stylesheet" type="text/css" href="style.css"> 
+    <link rel="manifest" href="manifest.json">
+    <script src="configure_sw.js"></script>
+    <script src="sw-configuration.js"></script>
+    <script src="sw.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>006 - Configuration</h1>
+      <h2>Service Worker Action</h2>
+    
+      Status: <span id="status">?</span><br/>
+
+      Network: <span id="online">?</span>
+      <p id="action"></p>
+
+      <h2>Service Workers Registered</h2>
+      <ul id="registered">
+      </ul>  
+    
+      <h2>Service Worker Configuration</h2>
+      <table>
+        <tr>
+            <th>Key</th>
+            <th>Default (sw.js)</th>
+            <th>Custom (sw-configuration.js)</th>
+        </tr>
+        <tbody  id="configurations">
+
+        </tbody>
+      </table>  
+    </header>
+    <main>
+        
+          
+    </main>
+    
+    
+    <script>
+        function setupConfigurationPage() {
+            getServiceWorkers().then(sws => {
+                var swsScopes = sws.map(sw => sw.scope)
+                // Check Status of current folder
+                var status = swsScopes.includes(currentFolder) ? "Active" : "Inactive"
+                document.getElementById("status").innerHTML = status + " - " + currentFolder
+                // Add button Register/Unregister
+                var buttonnode= document.createElement('input');
+                buttonnode.setAttribute('type','button');
+                document.getElementById("action").innerHTML = ''
+                document.getElementById("action").appendChild(buttonnode);
+                
+                if(status == "Inactive"){
+                    buttonnode.setAttribute('value','Register');
+                    buttonnode.addEventListener('click', () => {
+                        setupServiceWorker(setupConfigurationPage)
+                    });
+                }
+
+                if(status == "Active"){
+                    buttonnode.setAttribute('value','Unregister');
+                    buttonnode.addEventListener('click', () => {
+                        unregisterServiceWorker(setupConfigurationPage)
+                    });
+                }
+
+                var online = window.navigator.onLine;
+                document.getElementById("online").innerHTML = online ? "Online" : "Offline"
+
+
+                // List all services workers of server
+                var ul = document.getElementById("registered")
+                ul.innerHTML = "";
+                swsScopes = swsScopes.sort()
+                swsScopes.forEach(scope => {
+                    var li = document.createElement("li");
+                    li.appendChild(document.createTextNode(scope));
+                    ul.appendChild(li)
+                });
+            })
+
+            // Show list of not function Configurations
+            var tableConfigurations = document.getElementById("configurations")
+            tableConfigurations.innerHTML = ""
+            Object.keys(swDefault).forEach(key => {
+                if(typeof swDefault[key] == "function"){
+                    return
+                }
+
+                var tr = document.createElement("tr");
+                tr.innerHTML =  `<td>${key}</td>`
+                            + `<td>${ swDefault[key] }</td>`
+                            + `<td>${ key in swCustom ? swCustom[key] : '' }`
+                tableConfigurations.appendChild(tr)
+            })
+        }
+
+        setupConfigurationPage()
+        
+    </script>
+</body>
+</html>

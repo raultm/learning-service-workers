@@ -11,12 +11,10 @@ body {
 }
 
 header {
-    height: 75px;
     padding: 30px;
 }
 
 main {
-    flex: auto;
     padding: 30px;
 }
 
