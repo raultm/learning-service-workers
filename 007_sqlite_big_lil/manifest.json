@@ -1,0 +1,15 @@
+{
+    "name": "Avisos",
+    "short_name": "Avisos",
+    "icons": [
+        {
+            "src": "icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "index.html",
+    "display": "fullscreen",
+    "background_color": "#FF9E48",
+    "theme_color": "#4DBA87"
+}
