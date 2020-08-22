@@ -141,19 +141,38 @@ function importDB()
     var list = document.getElementById("list-avisos")
         list.innerHTML = "Cargando Datos"
         console.log("Hola")
-    var editor = document.getElementById('commands')
-        console.log(editor)
-        editor.value = "SELECT `name`, `sql`\n  FROM `sqlite_master`\n  WHERE type='table';";
+    
 	r.onload = function (event) {
         window.localStorage.removeItem("avisos.sqlite");
-        
         // r.result is a Binary Array, convert to Binary String
         window.localStorage.setItem("avisos.sqlite", toBinString(r.result));
         db = null
-        runCommands()
+        showTables()
     }
 	r.readAsArrayBuffer(f);
 }
+
+function showTables()
+{
+    var results = execAvisosSQL("SELECT `name`, `sql`\n  FROM `sqlite_master`\n  WHERE type='table';")
+    var tablesDiv = document.getElementById("tables")
+    var commands = document.getElementById('commands')
+    tablesDiv.innerHTML = "";
+    commands.value = ""
+    results[0].values.forEach( row => {
+        var tableName = row[0]
+        tablesDiv.innerHTML+= `<button onclick="showTable('${tableName}')">${tableName}</button>`
+        commands.value+= `SELECT * FROM ${tableName};\n`
+    })
+}
+
+function showTable(tableName)
+{
+    var commands = document.getElementById('commands')
+    commands.value = `SELECT * FROM ${tableName};\n`
+    runCommands()
+}
+
 
 var tableCreate = function () {
 	function valconcat(vals, tagName) {

@@ -21,12 +21,14 @@
       <h1>007 - Sqlite Big/Lil'</h1>
 
       <button onclick="console.log(insertAndUpdateAvisos())">Guardar Aviso</button>
-      <button style="display:none" onclick="listAvisos()">Refrescar Listado</button> <!-- Faster when number of items is big -->
-      <button onclick="listAvisosTable()">Refrescar Listado</button>
+      <button onclick="showTables()">Show Tables</button>
       <button onclick="removeDB()">Remove Database</button>
       <button onclick="exportDB()">Descargar SQLite</button>
       
       <br/><br/>
+
+      <div id="tables">
+     </div>
       
       <textarea id="commands" rows="4" cols="50">SELECT * FROM avisos;
 
@@ -35,8 +37,8 @@
       <button onclick="runCommands()">Run commands</button>
       <label class="button">Load an SQLite database file: <input onchange="importDB()" type='file' id='dbfile'></label>
 
-      <h2>Avisos</h2>
-      <ul id="list-avisos">
+      <h2  style="display:none">Avisos</h2>
+      <ul id="list-avisos" style="display:none">
       </ul>  
       <pre id="output">Results will be displayed here</pre>
     
