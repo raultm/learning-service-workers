@@ -4,53 +4,77 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Configurable Service Worker</title>
+    <title>008 - Api Calls with axios</title>
     <meta name="description" content="Home App">
-    <link rel="icon" type="image/png" sizes="512x512" href="icon.png">
-    <link rel="apple-touch-icon" href="icon.png">
-    <link rel="apple-touch-startup-image" href="icon.png">
     <link rel="stylesheet" type="text/css" href="style.css"> 
-    <link rel="manifest" href="manifest.json">
-    <script src="configure_sw.js"></script>
-    <script src="sql.js"></script>
-    <script src="avisos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
     <header>
-      <h1>007 - Sqlite Big/Lil'</h1>
+      <h1>008 - Api Calls with axios</h1>
 
-      <button onclick="console.log(insertAndUpdateAvisos())">Guardar Aviso</button>
-      <button onclick="showTables()">Show Tables</button>
-      <button onclick="showVersion()">Show DB Version</button>
-      <button onclick="removeDB()">Remove Database</button>
-      <button onclick="exportDB()">Descargar SQLite</button>
+      <input type="text" name="baseURL" id="baseURL" value="http://localhost:8000/api/" />
+      <input type="text" name="api_token" id="api_token" placeholder="Your User API token" />
+      <input type="text" name="api_token" id="custom" placeholder="Custom Url" />
       
-      <br/><br/>
+      <div>
+        <br />
+        <input type="button" onclick="getParks()" value="Parks" />
+        <input type="button" onclick="getCustom()" value="Custom" />
+      </div>
 
-      <div id="tables">
-     </div>
-      
-      <textarea id="commands" rows="4" cols="50">SELECT * FROM avisos;
-
-      </textarea>
-      <br/><br/>
-      <button onclick="runCommands()">Run commands</button>
-      <label class="button">Load an SQLite database file: <input onchange="importDB()" type='file' id='dbfile'></label>
-
-      <h2  style="display:none">Avisos</h2>
-      <ul id="list-avisos" style="display:none">
-      </ul>  
-      <pre id="output">Results will be displayed here</pre>
+      <div id="output"></div>
     
     </header>
-    <main>
-        
-          
-    </main>
-    
     
     <script>
+    function getParks(){
+        axios({
+            // method: 'get',
+            baseURL: document.getElementById('baseURL').value,
+            url: 'parks',
+            headers: {'Authorization': 'Bearer ' + document.getElementById('api_token').value},
+        })
+        .then( response => {
+            console.log(response.data)
+            showList(response.data)
+        })
+        .catch( error => {
+            console.log(error)
+        });
+    }
+
+    function getCustom(){
+        axios({
+            // method: 'get',
+            baseURL: document.getElementById('baseURL').value,
+            url: document.getElementById('custom').value,
+            headers: {'Authorization': 'Bearer ' + document.getElementById('api_token').value},
+            validateStatus: function (status) { return status < 299; }
+        })
+        .then( response => {
+            showList(response.data)
+        })
+        .catch( error => {
+            alert(error.message)
+            console.log(error)
+        });
+    }
+
+    function showList(objectsArray){
+        var output = document.getElementById('output');
+        var outputString = "<table>"
+        objectsArray.forEach(element => {
+            if( outputString == "<table>" ) {
+              outputString+= "<tr><th>" + Object.keys(element).join("</th><th>") + "</th></tr>"
+            }
+            outputString+= "<tr><td>" + Object.values(element).join("</td><td>") + "</td></tr>"
+        });
+        outputString+= "</table>"
+        output.innerHTML = outputString
+    }
+
     </script>
 </body>
 </html>
