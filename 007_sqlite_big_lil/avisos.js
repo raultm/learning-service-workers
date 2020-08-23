@@ -158,18 +158,33 @@ function showTables()
     var tablesDiv = document.getElementById("tables")
     var commands = document.getElementById('commands')
     tablesDiv.innerHTML = "";
-    commands.value = ""
+    commands.value = `PRAGMA user_version; /* For migrations purposes */ \n`
     results[0].values.forEach( row => {
         var tableName = row[0]
         tablesDiv.innerHTML+= `<button onclick="showTable('${tableName}')">${tableName}</button>`
-        commands.value+= `SELECT * FROM ${tableName};\n`
+        if(tableName != "sqlite_sequence"){
+            commands.value+= `\n/* ${tableName} - Structure and 10 records */\n`
+            commands.value+= `PRAGMA table_info(${tableName});\n`
+            commands.value+= `SELECT * FROM ${tableName} LIMIT 10;\n`
+        }else{
+            commands.value+= `\n/* Last Index created in each table */\n`
+            commands.value+= `SELECT * FROM ${tableName};\n`
+        }
     })
+    runCommands()
 }
 
 function showTable(tableName)
 {
     var commands = document.getElementById('commands')
     commands.value = `SELECT * FROM ${tableName};\n`
+    runCommands()
+}
+
+function showVersion()
+{
+    var commands = document.getElementById('commands')
+    commands.value = `PRAGMA user_version; /* For migrations purposes */ \n`
     runCommands()
 }
 
